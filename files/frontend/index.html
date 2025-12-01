@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FullStackRubyApp - Home</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>FullStackRubyApp</h1>
+      <div>
+        <a class="btn" href="/login.html">Login</a>
+        <a class="btn" href="/register.html">Register</a>
+      </div>
+    </div>
+
+    <div id="posts-root"></div>
+  </div>
+
+  <script>
+    const API_BASE = '/api';
+    async function loadPosts(){
+      const res = await fetch(`${API_BASE}/posts`);
+      const posts = await res.json();
+      const root = document.getElementById('posts-root');
+      root.innerHTML = posts.map(p => `
+        <div class="card">
+          <h3>${p.title}</h3>
+          <p style="color:var(--muted)">by ${p.user.name} · ${new Date(p.created_at).toLocaleString()}</p>
+          <p>${p.body.substring(0, 300)}</p>
+          <a href="/post.html?id=${p.id}">View</a>
+        </div>`).join('');
+    }
+    loadPosts();
+  </script>
+</body>
+</html>
